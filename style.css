@@ -466,3 +466,25 @@ button {
 .restore-button { border:1px solid #64748b;border-radius:12px;background:#334155;color:#fff;font-weight:700;padding:15px; }
 .backup-warning { color:#fbbf24!important; }
 #backup-message { min-height:20px;overflow-wrap:anywhere; }
+
+/* iPhone PWA: keep header below the status bar / Dynamic Island. */
+.app {
+  padding-top: calc(24px + env(safe-area-inset-top, 0px));
+}
+.header { min-height: 40px; }
+.header h1 { overflow-wrap: anywhere; }
+
+/* Settings and graph pages use the persistent bottom navigation. */
+.settings-heading { gap: 0; }
+
+/* Native iOS time controls must not overflow their cards. */
+.settings-form { min-width: 0; width: 100%; }
+.settings-form input[type="time"] {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.goal-inputs { min-width: 0; }
+.goal-inputs input { min-width: 0; }

@@ -1,8 +1,8 @@
 "use strict";
 
 // 初期設定：起床7時・非堕落目標10時間。
-const DEFAULT_WAKE_MINUTES = 7 * 60;
-const DEFAULT_GOAL_MINUTES = 10 * 60;
+const DEFAULT_WAKE_MINUTES = 9 * 60;
+const DEFAULT_GOAL_MINUTES = 8 * 60;
 const KEY = "daraku_app_bank_v1";
 const OLD_KEY = "daraku_timer_v3";
 const DEFAULT_ACTIVITIES = [
@@ -276,7 +276,7 @@ function showPage(name) {
   render();
 }
 $("settings").addEventListener("click",()=>showPage("settings"));
-$("settings-back").addEventListener("click",()=>showPage("home"));
+
 $("settings-form").addEventListener("submit",event=>{
   event.preventDefault();
   synchronize();
@@ -324,10 +324,6 @@ function showGraphs(kind,origin){
   showPage("graphs");renderGraphs();
 }
 $("bank-graph-button").addEventListener("click",()=>showGraphs("bank","bank"));
-$("graphs-back").addEventListener("click",()=>{
-  if (graphReturnPage === "history") showPage("home");
-  else showPage(graphReturnPage);
-});
 document.querySelectorAll("[data-chart]").forEach(button=>button.addEventListener("click",()=>{chartKind=button.dataset.chart;renderGraphs();}));
 document.querySelectorAll("[data-period]").forEach(button=>button.addEventListener("click",()=>{chartPeriod=button.dataset.period;renderGraphs();}));
 function renderGraphs(){
