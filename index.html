@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101827">
+  <title>堕落カウントダウン</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="堕落カウント">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="app">
+    <header class="header"><h1>堕落カウントダウン</h1><button id="settings" type="button" aria-label="設定">⚙</button></header>
+    <section id="home-page" class="page active">
+      <section class="timer"><p class="timer-label">残り堕落時間</p><h2 id="remaining">--:--:--</h2><p id="status">読み込み中...</p></section>
+      <section class="summary"><div class="card"><p>自由時間銀行</p><strong id="bank">00:00:00</strong></div><div class="card"><p>今日の非堕落時間</p><strong id="productive">00:00:00</strong></div></section>
+      <h3 class="section-title">活動を切り替える</h3>
+      <section class="activities" id="activities-list"></section>
+    </section>
+    <section id="bank-page" class="page">
+      <h2 class="page-title">自由時間銀行</h2>
+      <div class="balance-box"><p>現在の銀行残高</p><strong id="bank-large">00:00:00</strong><small id="bank-warning"></small></div>
+      <div class="card bank-info"><div><span>今日の貯蓄見込み</span><b id="saving-estimate">00:00:00</b></div><div><span>今日の手動引き出し</span><b id="withdrawn-today">00:00:00</b></div></div>
+      <h3 class="section-title">時間を引き出す</h3>
+      <div class="withdraw-grid"><button data-minutes="15">15分</button><button data-minutes="30">30分</button><button data-minutes="60">1時間</button><button data-minutes="120">2時間</button></div>
+      <form id="withdraw-form" class="custom-withdraw"><label>自由入力 <input id="withdraw-hours" type="number" min="0" max="999" value="0" inputmode="numeric"> 時間</label><label><input id="withdraw-minutes" type="number" min="0" max="59" value="30" inputmode="numeric"> 分</label><button type="submit">引き出す</button></form>
+      <p id="withdraw-message" class="hint" role="status"></p>
+      <button id="bank-graph-button" class="graph-link" type="button">📈 銀行残高のグラフを見る</button>
+      <h3 class="section-title">最近の取引</h3><div id="transactions" class="card transactions"></div>
+    </section>
+    <section id="graphs-page" class="page">
+      <div class="settings-heading"><button id="graphs-back" type="button" aria-label="戻る">←</button><h2 class="page-title">記録グラフ</h2></div>
+      <div class="chart-tabs" role="group" aria-label="グラフの種類">
+        <button type="button" data-chart="activity" class="active">活動時間</button>
+        <button type="button" data-chart="bank">銀行残高</button>
+      </div>
+      <div id="activity-chart-panel">
+        <div class="chart-tabs period-tabs" role="group" aria-label="集計期間">
+          <button type="button" data-period="day" class="active">日別</button>
+          <button type="button" data-period="week">週間</button>
+          <button type="button" data-period="month">月間</button>
+        </div>
+        <div class="card chart-card">
+          <h3>活動時間の内訳</h3>
+          <p class="hint">堕落時間と非堕落時間の比較（時間）</p>
+          <div id="activity-chart" class="chart-bars"></div>
+          <div id="activity-legend" class="chart-legend"></div>
+        </div>
+        <div id="activity-chart-summary" class="card chart-summary"></div>
+      </div>
+      <div id="bank-chart-panel" hidden>
+        <div class="card chart-card">
+          <h3>銀行残高の推移</h3>
+          <p class="hint">直近30日・日末残高（当日は現在残高）</p>
+          <div id="bank-chart"></div>
+        </div>
+        <div id="bank-chart-summary" class="card chart-summary"></div>
+      </div>
+      <p class="hint chart-footnote">グラフはこの端末に保存されている記録を使用します。記録のない過去の日は表示されません。</p>
+    </section>
+    <section id="settings-page" class="page">
+      <div class="settings-heading"><button id="settings-back" type="button" aria-label="戻る">←</button><h2 class="page-title">設定</h2></div>
+      <form id="settings-form" class="card settings-form">
+        <label for="wake-time">毎日の起床予定時刻</label>
+        <input id="wake-time" type="time" required>
+        <p class="hint">予定時刻から、寝ていても堕落時間を自動計算します。</p>
+        <label for="goal-hours">1日の非堕落時間の目標</label>
+        <div class="goal-inputs"><input id="goal-hours" type="number" min="0" max="23" required inputmode="numeric"><span>時間</span><input id="goal-minutes" type="number" min="0" max="59" required inputmode="numeric"><span>分</span></div>
+        <p class="hint">堕落以外の活動の合計目標です。</p>
+        <button class="save-settings" type="submit">設定を保存</button>
+        <p id="settings-message" class="hint" role="status"></p>
+      </form>
+      <section class="activity-settings">
+        <h3 class="section-title">活動のカスタマイズ</h3>
+        <p class="hint">堕落以外の活動を追加・編集できます。削除した活動の過去の記録は残ります。</p>
+        <div id="activity-editor"></div>
+        <form id="add-activity-form" class="card editor-form">
+          <h3>新しい活動を追加</h3>
+          <label>活動名 <input id="new-activity-name" maxlength="12" placeholder="例：読書" required></label>
+          <label>アイコン <input id="new-activity-icon" maxlength="8" value="📚" required></label>
+          <label>色 <input id="new-activity-color" type="color" value="#0f766e"></label>
+          <button class="save-settings" type="submit">活動を追加</button>
+        </form>
+        <p id="activity-message" class="hint" role="status"></p>
+      </section>
+      <section class="backup-settings" aria-labelledby="backup-title">
+        <h3 id="backup-title" class="section-title">データのバックアップ・復元</h3>
+        <div class="card backup-card">
+          <p class="hint">活動記録・銀行残高・設定を、この端末にJSONファイルとして保存できます。</p>
+          <button id="export-backup" type="button" class="save-settings">⬇ バックアップを保存</button>
+          <label class="backup-file-label" for="import-backup">復元するバックアップファイル</label>
+          <input id="import-backup" type="file" accept=".json,application/json">
+          <button id="restore-backup" type="button" class="restore-button">⬆ バックアップから復元</button>
+          <p class="hint backup-warning">復元すると現在の記録は上書きされます。復元前にバックアップを保存してください。</p>
+          <p id="backup-message" class="hint" role="status" aria-live="polite"></p>
+        </div>
+      </section>
+      <p class="hint settings-note">今日の計測が始まっている場合は、記録を壊さないよう変更を翌日から適用します。</p>
+    </section>
+    <nav class="bottom-nav" aria-label="画面切り替え"><button class="nav-item active" data-page="home" type="button"><span class="nav-icon">⌂</span><span>ホーム</span></button><button class="nav-item" data-page="bank" type="button"><span class="nav-icon">▤</span><span>銀行</span></button><button class="nav-item" data-page="history" type="button"><span class="nav-icon">▥</span><span>履歴</span></button></nav>
+  </main>
+</body>
+</html>

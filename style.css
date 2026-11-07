@@ -1,0 +1,468 @@
+* {
+  box-sizing:border-box;
+}
+
+body {
+  margin:0;
+  background:#101827;
+  color:#fff;
+  font-family:Arial,"Helvetica Neue",sans-serif;
+}
+
+button,input {
+  font:inherit;
+}
+
+button {
+  cursor:pointer;
+}
+
+.app {
+  max-width:430px;
+  min-height:100dvh;
+  margin:auto;
+  padding:24px 20px calc(110px + env(safe-area-inset-bottom, 0px));
+}
+
+.header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.header h1 {
+  margin:0;
+  font-size:22px;
+}
+
+.header button {
+  border:0;
+  background:none;
+  color:white;
+  font-size:26px;
+}
+
+.page {
+  display:none;
+}
+
+.page.active {
+  display:block;
+}
+
+.timer {
+  text-align:center;
+  margin:65px 0 40px;
+}
+
+.timer-label {
+  color:#9ca3af;
+  font-size:16px;
+  margin-bottom:12px;
+}
+
+.timer h2 {
+  margin:0;
+  color:#34d399;
+  font-size:clamp(40px,11vw,56px);
+  font-variant-numeric:tabular-nums;
+  letter-spacing:-1px;
+}
+
+#status {
+  color:#9ca3af;
+  font-size:14px;
+  margin-top:16px;
+}
+
+.summary {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+
+.card {
+  min-width:0;
+  background:#1f2937;
+  border-radius:14px;
+  padding:18px 12px;
+}
+
+.card p {
+  color:#9ca3af;
+  font-size:12px;
+  margin:0 0 12px;
+}
+
+.card strong {
+  display:block;
+  color:#34d399;
+  font-size:clamp(15px,4.5vw,20px);
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+
+#productive {
+  color:#fff;
+}
+
+.section-title {
+  color:#d1d5db;
+  font-size:16px;
+  font-weight:600;
+  margin:40px 0 18px;
+}
+
+.activities {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+
+.activity {
+  min-width:0;
+  min-height:125px;
+  border:2px solid transparent;
+  border-radius:16px;
+  color:white;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  padding:14px 8px;
+  transition:transform .15s,border-color .15s;
+}
+
+.activity:active {
+  transform:scale(.97);
+}
+
+.activity.selected {
+  border-color:#fff;
+}
+
+.activity-icon {
+  font-size:28px;
+  line-height:1;
+}
+
+.activity-name {
+  font-size:16px;
+  font-weight:600;
+}
+
+.activity small {
+  font-size:13px;
+  font-weight:500;
+  opacity:.9;
+  font-variant-numeric:tabular-nums;
+}
+
+.daraku {
+  background:#9f3030;
+}
+
+.study {
+  background:#2563eb;
+}
+
+.workout {
+  background:#15803d;
+}
+
+.work {
+  background:#7e22ce;
+}
+
+/* Instagram / YouTube のように、画面下部に常時固定するナビゲーション */
+.bottom-nav {
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:100;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  width:100%;
+  max-width:430px;
+  min-height:68px;
+  margin:0;
+  padding:10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+  border-top:1px solid #374151;
+  background:#101827;
+  box-shadow:0 -4px 16px rgba(0,0,0,.16);
+}
+
+.nav-item {
+  border:0;
+  background:none;
+  color:#9ca3af;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:5px;
+  font-size:12px;
+}
+
+.nav-icon {
+  font-size:25px;
+}
+
+.nav-item.active {
+  color:#34d399;
+}
+
+.page-title {
+  font-size:23px;
+  margin:38px 0 25px;
+}
+
+.balance-box {
+  text-align:center;
+  padding:22px 0;
+}
+
+.balance-box p {
+  font-size:14px;
+  color:#9ca3af;
+}
+
+.balance-box strong {
+  display:block;
+  font-size:clamp(36px,10vw,48px);
+  color:#34d399;
+  font-variant-numeric:tabular-nums;
+}
+
+.balance-box small {
+  display:block;
+  min-height:20px;
+  margin-top:10px;
+  color:#f87171;
+}
+
+.bank-info {
+  display:grid;
+  gap:18px;
+}
+
+.bank-info div {
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  font-size:13px;
+}
+
+.bank-info span {
+  color:#9ca3af;
+}
+
+.bank-info b {
+  font-variant-numeric:tabular-nums;
+}
+
+.withdraw-grid {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+}
+
+.withdraw-grid button,.custom-withdraw button {
+  border:0;
+  border-radius:10px;
+  background:#253247;
+  color:#fff;
+  padding:13px 4px;
+  font-size:13px;
+}
+
+.withdraw-grid button:disabled,.custom-withdraw button:disabled {
+  opacity:.4;
+  cursor:not-allowed;
+}
+
+.custom-withdraw {
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:14px;
+  font-size:12px;
+}
+
+.custom-withdraw input {
+  width:55px;
+  padding:9px 5px;
+  border:1px solid #475569;
+  border-radius:8px;
+  background:#1f2937;
+  color:white;
+}
+
+.custom-withdraw button {
+  background:#047857;
+  padding:12px;
+}
+
+.hint {
+  font-size:12px;
+  color:#9ca3af;
+  line-height:1.6;
+}
+
+.transactions {
+  display:grid;
+  gap:12px;
+}
+
+.transaction {
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  padding-bottom:10px;
+  border-bottom:1px solid #374151;
+  font-size:13px;
+}
+
+.transaction:last-child {
+  border:0;
+  padding:0;
+}
+
+.transaction small {
+  display:block;
+  color:#9ca3af;
+  margin-top:5px;
+}
+
+.positive {
+  color:#34d399!important;
+}
+
+.negative {
+  color:#f87171!important;
+}
+
+.history-card {
+  margin-bottom:12px;
+  display:grid;
+  gap:9px;
+}
+
+.history-card h3 {
+  font-size:15px;
+  margin:0 0 4px;
+}
+
+.history-card div {
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  font-size:13px;
+}
+
+.history-card span {
+  color:#9ca3af;
+}
+
+@media(max-width:360px) {
+  .app {
+    padding-left:14px;
+    padding-right:14px;
+  }
+
+  .header h1 {
+    font-size:19px;
+  }
+
+  .activity-name {
+    font-size:14px;
+  }
+
+  .activity small {
+    font-size:12px;
+  }
+
+}
+
+/* 設定画面 */
+.settings-heading { display:flex;align-items:center;gap:15px; }
+.settings-heading button { background:none;border:0;color:white;font-size:26px; }
+.settings-form { display:flex;flex-direction:column;gap:12px; }
+.settings-form label { font-weight:600;font-size:14px; }
+.settings-form input { background:#101827;border:1px solid #475569;border-radius:10px;color:white;padding:12px;font-size:17px;max-width:100%; }
+.settings-form input[type=time] { width:100%;color-scheme:dark; }
+.goal-inputs { display:flex;align-items:center;gap:10px; }
+.goal-inputs input { width:76px; }
+.goal-inputs span { color:#d1d5db;font-size:14px; }
+.settings-form .hint { margin:0 0 12px; }
+.save-settings { border:0;border-radius:12px;background:#047857;color:white;font-weight:700;padding:15px; }
+.settings-note { margin-top:18px; }
+
+/* 活動のカスタマイズ */
+.activity-settings { margin-top:34px; }
+#activity-editor { display:grid;gap:12px; }
+.editor-form { display:flex;flex-direction:column;gap:12px;margin-bottom:12px; }
+.editor-form h3 { margin:0;font-size:15px; }
+.editor-form label { display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;color:#d1d5db; }
+.editor-form input:not([type=color]) { width:min(65%,220px);background:#101827;border:1px solid #475569;border-radius:8px;padding:10px;color:#fff; }
+.editor-form input[type=color] { width:70px;height:38px;padding:2px;border:1px solid #475569;background:#101827;border-radius:8px; }
+.editor-actions { display:flex;gap:10px; }
+.editor-actions button { flex:1;border:0;border-radius:10px;background:#047857;color:#fff;padding:12px 5px;font-size:13px; }
+.editor-actions .delete-activity { background:#7f1d1d; }
+
+
+/* 履歴・銀行グラフ */
+.graph-link {
+  display:block;
+  width:100%;
+  padding:14px;
+  margin:18px 0;
+  background:#253247;
+  color:#e5e7eb;
+  border:1px solid #475569;
+  border-radius:12px;
+  font-weight:600;
+}
+.chart-tabs { display:flex;gap:8px;margin:18px 0; }
+.chart-tabs button { flex:1;min-width:0;padding:12px 6px;background:#253247;color:#cbd5e1;border:1px solid #475569;border-radius:10px;font-size:13px; }
+.chart-tabs button.active { background:#047857;border-color:#34d399;color:white;font-weight:700; }
+.period-tabs { margin-top:8px; }
+.chart-card { padding:18px 12px;margin-bottom:12px; }
+.chart-card h3 { font-size:16px;margin:0 0 8px; }
+.chart-card .hint { margin:0 0 20px; }
+.chart-bars { display:flex;align-items:stretch;justify-content:space-around;gap:7px;min-height:235px;overflow-x:auto;padding-bottom:8px; }
+.chart-column { display:flex;flex:1;min-width:31px;max-width:75px;flex-direction:column;align-items:center;gap:6px; }
+.chart-column .bar-value { color:#d1d5db;font-size:10px;white-space:nowrap; }
+.chart-column .bar-track { width:100%;height:175px;display:flex;flex-direction:column;justify-content:flex-end;border-radius:5px;background:#111827;overflow:hidden; }
+.chart-column .bar-part { width:100%;min-height:0; }
+.chart-column .bar-label { color:#cbd5e1;font-size:10px;white-space:nowrap;text-align:center; }
+.chart-legend { display:flex;flex-wrap:wrap;gap:10px;margin-top:15px; }
+.chart-legend span { display:flex;align-items:center;gap:5px;color:#d1d5db;font-size:11px; }
+.chart-legend i { display:inline-block;width:10px;height:10px;border-radius:2px; }
+.chart-summary { display:grid;gap:12px;margin-bottom:14px; }
+.chart-summary div { display:flex;justify-content:space-between;gap:8px;font-size:13px; }
+.chart-summary span { color:#9ca3af; }
+.chart-summary b { font-variant-numeric:tabular-nums; }
+.chart-empty { color:#9ca3af;font-size:13px;text-align:center;padding:48px 0; }
+#bank-chart svg { display:block;width:100%;height:auto;overflow:visible; }
+.chart-axis { fill:#9ca3af;font-size:10px; }
+.chart-gridline { stroke:#374151;stroke-width:1; }
+.chart-zero { stroke:#f87171;stroke-width:1;stroke-dasharray:4 3; }
+.chart-line { fill:none;stroke:#34d399;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round; }
+.chart-point { fill:#34d399; }
+.chart-footnote { margin-top:15px; }
+[hidden] { display:none!important; }
+
+/* バックアップ・復元 */
+.backup-settings { margin-top:34px; }
+.backup-card { display:flex;flex-direction:column;gap:14px; }
+.backup-card .hint { margin:0;line-height:1.6; }
+.backup-file-label { font-size:14px;font-weight:600; }
+#import-backup { width:100%;min-width:0;max-width:100%;color:#e5e7eb;font-size:13px; }
+#import-backup::file-selector-button { background:#334155;color:#fff;border:0;border-radius:8px;padding:9px;margin-right:10px; }
+.restore-button { border:1px solid #64748b;border-radius:12px;background:#334155;color:#fff;font-weight:700;padding:15px; }
+.backup-warning { color:#fbbf24!important; }
+#backup-message { min-height:20px;overflow-wrap:anywhere; }
