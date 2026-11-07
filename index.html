@@ -68,7 +68,7 @@
       <div class="settings-heading"><h2 class="page-title">設定</h2></div>
       <form id="settings-form" class="card settings-form">
         <label for="wake-time">毎日の起床予定時刻</label>
-        <input id="wake-time" type="time" required>
+        <div class="wake-time-wrap"><input id="wake-time" type="time" required></div>
         <p class="hint">予定時刻から、寝ていても堕落時間を自動計算します。</p>
         <label for="goal-hours">1日の非堕落時間の目標</label>
         <div class="goal-inputs"><input id="goal-hours" type="number" min="0" max="23" required inputmode="numeric"><span>時間</span><input id="goal-minutes" type="number" min="0" max="59" required inputmode="numeric"><span>分</span></div>
