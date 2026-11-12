@@ -493,3 +493,38 @@ button {
 .settings-form.card { width:100%; min-width:0; overflow:hidden; }
 .wake-time-wrap { display:block; width:100%; min-width:0; max-width:100%; overflow:hidden; border:1px solid #475569; border-radius:10px; background:#101827; }
 .wake-time-wrap #wake-time { display:block; width:100%; min-width:0; max-width:100%; height:54px; margin:0; padding:10px 12px; border:0; border-radius:0; background:transparent; color:#fff; font-size:17px; box-sizing:border-box; -webkit-appearance:none; appearance:none; }
+
+/* 第1段階：履歴編集 */
+.history-card{margin:12px 0;padding:16px;}
+.history-summary-row{display:flex;justify-content:space-between;gap:12px;padding:5px 0;}
+.record-editor{display:grid;grid-template-columns:1fr 1fr;gap:10px;border-top:1px solid #475569;padding:14px 0;margin-top:12px;}
+.record-editor label{display:flex;flex-direction:column;gap:5px;font-size:13px;}
+.record-editor label:first-child{grid-column:1/-1;}
+.record-editor input,.record-editor select{min-width:0;width:100%;max-width:100%;padding:9px;border-radius:8px;background:#18243a;color:white;border:1px solid #64748b;box-sizing:border-box;}
+.record-editor button,.record-editor p{grid-column:1/-1;}
+.record-editor button{padding:10px;border:0;border-radius:9px;background:#2563eb;color:white;font-weight:bold;}
+
+/* 1つに統合した記録編集パネル */
+.compact-history-editor{display:flex;flex-direction:column;gap:12px;margin:14px 0;padding:16px;}
+.compact-history-editor h3{margin:0 0 2px;}
+.compact-history-editor label{display:flex;flex-direction:column;gap:5px;font-size:13px;}
+.compact-history-editor input,.compact-history-editor select{width:100%;min-width:0;box-sizing:border-box;padding:10px;border-radius:9px;border:1px solid #64748b;background:#18243a;color:#fff;}
+.compact-time-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;}
+.compact-history-editor button{padding:12px;border:0;border-radius:9px;background:#2563eb;color:white;font-weight:bold;}
+.compact-history-editor button:disabled{opacity:.45;}
+.compact-history-editor .hint{margin:0;}
+.history-details{margin:14px 0;}
+.history-details>summary{cursor:pointer;padding:12px 4px;}
+
+/* 1日の時間帯グラフ */
+.timeline-date-label{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px 0;color:#cbd5e1;font-size:14px}
+.timeline-date-label select{background:#1e293b;color:#fff;border:1px solid #475569;border-radius:8px;padding:8px;max-width:70%}
+.timeline-chart{margin-top:14px;overflow-x:auto}
+.timeline-axis,.timeline-row{display:grid;grid-template-columns:78px minmax(0,1fr);gap:8px;align-items:center}
+.timeline-axis{margin-bottom:8px}
+.timeline-hours{display:flex;justify-content:space-between;font-size:10px;color:#94a3b8;font-variant-numeric:tabular-nums}
+.timeline-row{margin:7px 0}
+.timeline-name{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.timeline-track{height:24px;position:relative;border-radius:4px;background:repeating-linear-gradient(to right,transparent 0,transparent calc(25% - 1px),#334155 calc(25% - 1px),#334155 25%),#172235;overflow:hidden}
+.timeline-block{position:absolute;top:3px;height:18px;border-radius:3px;min-width:1px;opacity:.96}
+.timeline-row:last-child .timeline-name{color:#f87171;font-weight:bold}

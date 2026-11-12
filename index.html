@@ -38,6 +38,7 @@
       <div class="settings-heading"><h2 class="page-title">記録グラフ</h2></div>
       <div class="chart-tabs" role="group" aria-label="グラフの種類">
         <button type="button" data-chart="activity" class="active">活動時間</button>
+        <button type="button" data-chart="timeline">1日の時間帯</button>
         <button type="button" data-chart="bank">銀行残高</button>
       </div>
       <div id="activity-chart-panel">
@@ -54,6 +55,15 @@
         </div>
         <div id="activity-chart-summary" class="card chart-summary"></div>
       </div>
+      <div id="timeline-chart-panel" hidden>
+        <div class="card chart-card">
+          <h3>1日の活動タイムライン</h3>
+          <p class="hint">横軸：時刻（0:00〜24:00）／縦軸：活動項目。堕落は最下段に赤色で表示します。</p>
+          <label class="timeline-date-label">日付 <select id="timeline-date" aria-label="グラフの日付"></select></label>
+          <div id="timeline-chart" class="timeline-chart"></div>
+          <p id="timeline-note" class="hint"></p>
+        </div>
+      </div>
       <div id="bank-chart-panel" hidden>
         <div class="card chart-card">
           <h3>銀行残高の推移</h3>
@@ -64,6 +74,7 @@
       </div>
       <p class="hint chart-footnote">グラフはこの端末に保存されている記録を使用します。記録のない過去の日は表示されません。</p>
     </section>
+    <section id="history-page" class="page"><h2 class="page-title">活動記録の修正</h2><p class="hint">日付・時間帯・変更後の項目を選ぶだけで修正できます。旧版の集計のみの記録は編集できません。</p><button type="button" id="history-graphs" class="graph-link">📊 記録グラフを見る</button><div id="history-list"></div></section>
     <section id="settings-page" class="page">
       <div class="settings-heading"><h2 class="page-title">設定</h2></div>
       <form id="settings-form" class="card settings-form">
@@ -78,7 +89,7 @@
       </form>
       <section class="activity-settings">
         <h3 class="section-title">活動のカスタマイズ</h3>
-        <p class="hint">堕落以外の活動を追加・編集できます。削除した活動の過去の記録は残ります。</p>
+        <p class="hint">堕落以外の活動を追加・編集できます。その他の活動は2個まで追加できます。削除した活動の過去の記録は残ります。</p>
         <div id="activity-editor"></div>
         <form id="add-activity-form" class="card editor-form">
           <h3>新しい活動を追加</h3>

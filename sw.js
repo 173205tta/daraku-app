@@ -1,5 +1,5 @@
 // Cache app shell for offline launch; prefer fresh versions when online.
-const CACHE = 'daraku-shell-v3';
+const CACHE = 'daraku-shell-v9-timeline';
 const SHELL = ['./', './index.html', './style.css', './script.js', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(SHELL)).then(() => self.skipWaiting()));
