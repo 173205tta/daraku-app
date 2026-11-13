@@ -694,11 +694,58 @@ $("restore-backup").addEventListener("click", async () => {
 });
 
 
-// PWA: secure origins (HTTPS / localhost) only. No app data is stored in the service worker.
+// PWA update prompt. All activity/bank records remain in localStorage.
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(error => {
-      console.warn('オフライン機能の登録に失敗しました:', error);
+  window.addEventListener('load', async () => {
+    const notice = document.getElementById('update-notice');
+    const nowButton = document.getElementById('update-now');
+    const laterButton = document.getElementById('update-later');
+    let waitingWorker = null;
+    let dismissedWorker = null;
+    let applyingUpdate = false;
+    let hadController = Boolean(navigator.serviceWorker.controller);
+
+    const offerUpdate = worker => {
+      if (!worker || worker === dismissedWorker || applyingUpdate || !navigator.serviceWorker.controller) return;
+      waitingWorker = worker;
+      notice.hidden = false;
+    };
+    nowButton.addEventListener('click', () => {
+      if (!waitingWorker) return;
+      applyingUpdate = true;
+      nowButton.disabled = true;
+      nowButton.textContent = '更新中…';
+      // Flush active timer data before reloading the page.
+      try { synchronize(); save(); } catch (error) { console.warn('更新前の保存に失敗:', error); }
+      waitingWorker.postMessage({ type: 'SKIP_WAITING' });
     });
+    laterButton.addEventListener('click', () => {
+      dismissedWorker = waitingWorker;
+      notice.hidden = true;
+    });
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (applyingUpdate) window.location.reload();
+    });
+
+    try {
+      const registration = await navigator.serviceWorker.register('./sw.js', {updateViaCache:'none'});
+      const watchInstalling = worker => {
+        if (!worker) return;
+        worker.addEventListener('statechange', () => {
+          if (worker.state === 'installed') offerUpdate(registration.waiting);
+        });
+      };
+      offerUpdate(registration.waiting);
+      watchInstalling(registration.installing);
+      registration.addEventListener('updatefound', () => watchInstalling(registration.installing));
+      // Check on opening, returning to app, and every 30 minutes while open.
+      const check = () => { if (navigator.onLine) registration.update().catch(() => {}); };
+      check();
+      document.addEventListener('visibilitychange', () => { if (!document.hidden) check(); });
+      window.addEventListener('online', check);
+      setInterval(check, 30 * 60 * 1000);
+    } catch (error) {
+      console.warn('オフライン機能の登録に失敗しました:', error);
+    }
   });
 }

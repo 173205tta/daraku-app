@@ -15,6 +15,10 @@
   <script src="script.js" defer></script>
 </head>
 <body>
+  <aside id="update-notice" class="update-notice" role="status" aria-live="polite" hidden>
+    <div class="update-notice__text"><strong>アップデートがあります</strong><span>新しいバージョンを利用できます。</span></div>
+    <div class="update-notice__actions"><button type="button" id="update-now">今すぐ更新</button><button type="button" id="update-later">あとで</button></div>
+  </aside>
   <main class="app">
     <header class="header"><h1>堕落カウントダウン</h1><button id="settings" type="button" aria-label="設定">⚙</button></header>
     <section id="home-page" class="page active">
