@@ -528,3 +528,10 @@ button {
 .timeline-track{height:24px;position:relative;border-radius:4px;background:repeating-linear-gradient(to right,transparent 0,transparent calc(25% - 1px),#334155 calc(25% - 1px),#334155 25%),#172235;overflow:hidden}
 .timeline-block{position:absolute;top:3px;height:18px;border-radius:3px;min-width:1px;opacity:.96}
 .timeline-row:last-child .timeline-name{color:#f87171;font-weight:bold}
+
+/* Ver.2.1: iPhone Safari time inputs must not overlap or overflow. */
+.compact-history-editor{min-width:0;max-width:100%;box-sizing:border-box;}
+.compact-time-row{width:100%;min-width:0;max-width:100%;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+.compact-time-row>label{min-width:0;max-width:100%;overflow:hidden;}
+.compact-time-input{display:block;width:100%;min-width:0;max-width:100%;overflow:hidden;border:1px solid #64748b;border-radius:9px;background:#18243a;box-sizing:border-box;}
+.compact-history-editor .compact-time-input input[type="time"]{display:block;width:100%;min-width:0;max-width:100%;height:48px;margin:0;padding:8px 6px;border:0;border-radius:0;box-sizing:border-box;background:transparent;color:#fff;font-size:16px;-webkit-appearance:none;appearance:none;color-scheme:dark;}

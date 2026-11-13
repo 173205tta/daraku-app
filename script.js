@@ -145,6 +145,16 @@ function synchronize(now=new Date()) {
     day=following;
     changed=true;
   }
+  // 起床前に開始した非堕落活動は、起床時刻で記録だけ分割し、計測は継続する。
+  // 起床前の区間はボーナス、起床後の区間は通常の活動時間になる。
+  const wake=wakeMs(day.key);
+  if(!day.closed && now.getTime()>=wake && day.sleepActive){
+    const continuingId=day.sleepActive.id;
+    closeSleep(day,wake);
+    day.activity=continuingId;
+    day.activityStart=wake;
+    changed=true;
+  }
   if(changed) save();
 }
 function metrics(day,nowMs) {
@@ -165,7 +175,6 @@ function render() {
   const m=metrics(day,now);
   $("remaining").textContent=sleeping?"--:--:--":format(m.remaining);
   $("remaining").style.color=m.remaining<0?"#f87171":"#34d399";
-  if(!sleeping && day.sleepActive){closeSleep(day,wakeMs(day.key));save();}
   $("status").textContent=sleeping?(day.sleepActive?`${activityById(day.sleepActive.id)?.name||"活動"}を計測中（睡眠モード）`:"睡眠モード・活動タイマー停止"):day.activity==="堕落"?"☕ 堕落中・カウントダウン中":`${activityById(day.activity)?.name??"活動"}中・カウントダウン停止`;
   $("productive").textContent=format(sleeping?sleepBonus(day,now):m.productive+sleepBonus(day,now));
   $("bank").textContent=format(m.bankNow);
@@ -237,7 +246,7 @@ function renderHistory(){
   const days=data.days.slice(-30).reverse();
   const editable=days.filter(d=>(d.segments?.length||0)+(d.sleepSegments?.length||0)>0);
   const editor=document.createElement("form");editor.className="card compact-history-editor";
-  editor.innerHTML=`<h3>✏️ 記録を修正</h3><label>日付<select id="edit-date" required></select></label><div class="compact-time-row"><label>開始時間<input id="edit-start" type="time" step="60" required></label><label>終了時間<input id="edit-end" type="time" step="60" required></label></div><label>変更後の項目<select id="edit-activity" required></select></label><button type="submit">この時間帯を修正</button><p id="edit-feedback" class="hint" role="status"></p>`;
+  editor.innerHTML=`<h3>✏️ 記録を修正</h3><label>日付<select id="edit-date" required></select></label><div class="compact-time-row"><label>開始時間<span class="compact-time-input"><input id="edit-start" type="time" step="60" required></span></label><label>終了時間<span class="compact-time-input"><input id="edit-end" type="time" step="60" required></span></label></div><label>変更後の項目<select id="edit-activity" required></select></label><button type="submit">この時間帯を修正</button><p id="edit-feedback" class="hint" role="status"></p>`;
   root.appendChild(editor);
   const dateSelect=editor.querySelector("#edit-date"),start=editor.querySelector("#edit-start"),end=editor.querySelector("#edit-end"),activity=editor.querySelector("#edit-activity"),feedback=editor.querySelector("#edit-feedback");
   const timeString=ms=>{const d=new Date(ms);return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");};
