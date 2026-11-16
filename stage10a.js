@@ -1,5 +1,5 @@
 import {auth,db} from './firebase.js';
-import {onAuthStateChanged} from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js';
+import {onAuthStateChanged,signInWithEmailAndPassword} from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js';
 import {doc,getDocFromServer,runTransaction} from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js';
 const KEY='daraku_app_bank_v1',COL='darakuSyncV1', $=id=>document.getElementById(id);
 let uid=null,step=0,preflight=null,written=null,busy=false,stopped=false;
@@ -13,8 +13,8 @@ function ref(){check(uid&&auth.currentUser?.uid===uid,'ログインが変わり�
 function say(s){$('status').textContent=s;ui()}
 function ui(){btn.forEach((b,i)=>b.disabled=busy||stopped||!uid||step!==i);btn[3].disabled ||= !$('saved').checked||$('phrase').value.trim()!=='iPhoneから初回登録';}
 async function go(fn){if(busy||stopped)return;busy=true;ui();try{await fn()}catch(e){stopped=true;say('停止：'+e.message+'\n本番iPhoneデータは変更していません。ログを送ってください。')}finally{busy=false;ui()}}
-onAuthStateChanged(auth,u=>{if(uid!==u?.uid){uid=u?.uid||null;step=0;preflight=null;written=null;stopped=false;} $('auth').textContent=uid?'ログイン済み（UID非表示）':'未ログイン：普段のアプリでログインしてください';ui()});
-$('saved').onchange=ui;$('phrase').oninput=ui;
+onAuthStateChanged(auth,u=>{if(uid!==u?.uid){uid=u?.uid||null;step=0;preflight=null;written=null;stopped=false;} $('auth').textContent=uid?'ログイン済み（UID非表示）':'未ログイン：下のフォームでFirebaseにログインしてください';$('login-panel').hidden=!!uid;ui()});
+$('login-form').onsubmit=async e=>{e.preventDefault();const result=$('login-result'),email=$('login-email').value.trim(),password=$('login-password').value;result.textContent='ログイン中…';try{await signInWithEmailAndPassword(auth,email,password);$('login-password').value='';result.textContent='ログイン成功';}catch(err){result.textContent='ログイン失敗：メールアドレス・パスワード・Firebase認証設定を確認してください（'+err.code+'）';$('login-password').value='';}}; $('saved').onchange=ui;$('phrase').oninput=ui;
 btn[0].onclick=()=>go(async()=>{check(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1','安全なHTTPS URLで開いてください');const {data}=read();const h=await hash(data);step=1;say('① 成功：iPhone localStorageを読み取り。'+JSON.stringify(counts(data))+'\nSHA-256：'+h+'\n端末書き込み0件')});
 btn[1].onclick=()=>go(async()=>{check(navigator.onLine,'オフラインです');const snap=await getDocFromServer(ref());check(!snap.exists(),'同期先は既に存在します。上書きせず停止します');preflight=true;step=2;say('② 成功：新規同期先 '+COL+' は未作成。既存3文書にはアクセスしていません')});
 btn[2].onclick=()=>go(async()=>{check(preflight,'先に②が必要');const {data}=read();const blob=new Blob([JSON.stringify({format:'daraku-countdown-backup',version:1,exportedAt:new Date().toISOString(),data},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='daraku-stage10a-iphone-before-cloud-'+Date.now()+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);step=3;say('③ バックアップのダウンロードを開始。ファイルの実保存を確認し、チェックを付けて④へ')});
